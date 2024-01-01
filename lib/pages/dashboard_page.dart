@@ -3,7 +3,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lapor_book/components/styles.dart';
 import 'package:lapor_book/models/account.dart';
-import 'package:lapor_book/pages/add_report.dart';
 import 'package:lapor_book/pages/my_reports_page.dart';
 import 'package:lapor_book/pages/profile_page.dart';
 import 'package:lapor_book/pages/report_list.dart';
