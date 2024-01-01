@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:lapor_book/components/styles.dart';
 import 'package:lapor_book/models/account.dart';
 import 'package:lapor_book/pages/add_report.dart';
+import 'package:lapor_book/pages/my_reports_page.dart';
 import 'package:lapor_book/pages/profile_page.dart';
 import 'package:lapor_book/pages/report_list.dart';
 
@@ -70,20 +71,22 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
     getAccount();
-    pages = <Widget>[
-      const ReportListPage(),
-      const AddReportPage(),
-      ProfilePage(account: account)
-    ];
   }
 
   @override
   Widget build(BuildContext context) {
+    pages = <Widget>[
+      ReportListPage(account: account),
+      MyReportsPage(account: account),
+      ProfilePage(account: account)
+    ];
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         backgroundColor: primaryColor,
         child: const Icon(Icons.add, size: 35),
-        onPressed: () {},
+        onPressed: () {
+          Navigator.pushNamed(context, '/add', arguments: {'account': account});
+        },
       ),
       appBar: AppBar(
         backgroundColor: primaryColor,
@@ -99,7 +102,7 @@ class _DashboardPageState extends State<DashboardPage> {
           unselectedItemColor: Colors.grey[800],
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard_outlined), label: 'Semua'),
+                icon: Icon(Icons.dashboard_outlined), label: 'All Report'),
             BottomNavigationBarItem(
                 icon: Icon(Icons.book_outlined), label: 'My Reports'),
             BottomNavigationBarItem(

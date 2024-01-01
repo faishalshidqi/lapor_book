@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:lapor_book/components/list_item.dart';
 import 'package:lapor_book/components/styles.dart';
@@ -6,22 +7,25 @@ import 'package:lapor_book/models/account.dart';
 import 'package:lapor_book/models/comment.dart';
 import 'package:lapor_book/models/report.dart';
 
-class ReportListPage extends StatefulWidget {
+class MyReportsPage extends StatefulWidget {
   final Account account;
-  const ReportListPage({super.key, required this.account});
+  const MyReportsPage({super.key, required this.account});
 
   @override
-  State<ReportListPage> createState() => _ReportListPageState();
+  State<MyReportsPage> createState() => _MyReportsPageState();
 }
 
-class _ReportListPageState extends State<ReportListPage> {
+class _MyReportsPageState extends State<MyReportsPage> {
+  final _auth = FirebaseAuth.instance;
   final _firestore = FirebaseFirestore.instance;
 
   List<Report> reportList = [];
   void getReports() async {
     try {
-      QuerySnapshot<Map<String, dynamic>> querySnapshot =
-          await _firestore.collection('reports').get();
+      QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
+          .collection('reports')
+          .where('uid', isEqualTo: _auth.currentUser!.uid)
+          .get();
 
       setState(() {
         reportList.clear();
@@ -75,7 +79,7 @@ class _ReportListPageState extends State<ReportListPage> {
                   return ListItem(
                       report: reportList[index],
                       account: widget.account,
-                      isMyReport: false);
+                      isMyReport: true);
                 }),
           ));
   }
