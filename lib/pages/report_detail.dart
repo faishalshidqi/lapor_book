@@ -68,7 +68,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                       const SizedBox(height: 15),
                       report.imageUrl != ''
                           ? Image.network(report.imageUrl!)
-                          : Image.asset('assets/istockphoto-default.jpg'),
+                          : Image.asset('assets/istock-default.jpg'),
                       const SizedBox(height: 20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -82,7 +82,7 @@ class _ListItemState extends State<ListItem> {
                     height: 130,
                   )
                 : Image.asset(
-                    'assets/istockphoto-default.jpg',
+                    'assets/istock-default.jpg',
                     width: 130,
                     height: 130,
                   ),

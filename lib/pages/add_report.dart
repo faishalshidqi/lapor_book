@@ -120,7 +120,7 @@ class _AddReportPageState extends State<AddReportPage> {
 
   Image imagePreview() {
     if (file == null) {
-      return Image.asset('assets/istockphoto-default.jpg',
+      return Image.asset('assets/istock-default.jpg',
           width: 180, height: 180);
     } else {
       return Image.file(File(file!.path), width: 180, height: 180);
