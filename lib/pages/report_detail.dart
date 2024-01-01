@@ -107,7 +107,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                         title: const Center(child: Text('Report Date')),
                         subtitle: Center(
                           child: Text(
-                              DateFormat('dd MM yyyy').format(report.date)),
+                              DateFormat('dd MMMM yyyy').format(report.date)),
                         ),
                         trailing: IconButton(
                           icon: const Icon(Icons.location_on),
@@ -145,6 +145,7 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                             child: const Text('Change Status'),
                           ),
                         )
+
                     ],
                   ),
                 ),

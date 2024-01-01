@@ -192,7 +192,9 @@ class _AddReportPageState extends State<AddReportPage> {
                                     customInputDecoration('Judul Laporan'),
                               )),
                           Container(
-                              margin: const EdgeInsets.symmetric(vertical: 10)),
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            child: imagePreview(),
+                          ),
                           Container(
                             width: double.infinity,
                             margin: const EdgeInsets.only(bottom: 10),
