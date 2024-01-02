@@ -48,7 +48,8 @@ class _AddReportPageState extends State<AddReportPage> {
 
     if (permission == LocationPermission.deniedForever) {
       return Future.error(
-          'Location permissions are permanently denied, we cannot request permissions');
+        'Location permissions are permanently denied, we cannot request permissions',
+      );
     }
 
     return await Geolocator.getCurrentPosition();
@@ -64,7 +65,6 @@ class _AddReportPageState extends State<AddReportPage> {
 
       Timestamp timestamp = Timestamp.fromDate(DateTime.now());
       String url = await uploadImage();
-      print('imageUrl: $url');
 
       String currentLocation = await getCurrentLocation().then((value) {
         return '${value.latitude},${value.longitude}';
@@ -84,7 +84,7 @@ class _AddReportPageState extends State<AddReportPage> {
         'name': account.name,
         'status': 'Posted',
         'date': timestamp,
-        'maps': maps
+        'maps': maps,
       }).catchError((error) {
         throw error;
       });
@@ -113,6 +113,8 @@ class _AddReportPageState extends State<AddReportPage> {
 
       return await storedDir.getDownloadURL();
     } catch (error) {
+      final snackBar = SnackBar(content: Text(error.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(error);
       return '';
     }
@@ -120,8 +122,7 @@ class _AddReportPageState extends State<AddReportPage> {
 
   Image imagePreview() {
     if (file == null) {
-      return Image.asset('assets/istock-default.jpg',
-          width: 180, height: 180);
+      return Image.asset('assets/istock-default.jpg', width: 180, height: 180);
     } else {
       return Image.file(File(file!.path), width: 180, height: 180);
     }
@@ -129,35 +130,39 @@ class _AddReportPageState extends State<AddReportPage> {
 
   Future<dynamic> uploadDialog(BuildContext context) {
     return showDialog(
-        context: context,
-        builder: (BuildContext buildContext) {
-          return AlertDialog(
-            title: const Text('Choose Source'),
-            actions: [
-              TextButton(
-                  onPressed: () async {
-                    XFile? upload =
-                        await imagePicker.pickImage(source: ImageSource.camera);
+      context: context,
+      builder: (BuildContext buildContext) {
+        return AlertDialog(
+          title: const Text('Choose Source'),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                XFile? upload =
+                    await imagePicker.pickImage(source: ImageSource.camera);
 
-                    setState(() {
-                      file = upload;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: const Icon(Icons.camera_alt)),
-              TextButton(
-                  onPressed: () async {
-                    XFile? upload = await imagePicker.pickImage(
-                        source: ImageSource.gallery);
-                    setState(() {
-                      file = upload;
-                    });
-                    Navigator.of(context).pop();
-                  },
-                  child: const Icon(Icons.photo_library))
-            ],
-          );
-        });
+                setState(() {
+                  file = upload;
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Icon(Icons.camera_alt),
+            ),
+            TextButton(
+              onPressed: () async {
+                XFile? upload = await imagePicker.pickImage(
+                  source: ImageSource.gallery,
+                );
+                setState(() {
+                  file = upload;
+                });
+                Navigator.of(context).pop();
+              },
+              child: const Icon(Icons.photo_library),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -168,95 +173,101 @@ class _AddReportPageState extends State<AddReportPage> {
     final Account account = arguments['account'];
 
     return Scaffold(
-        appBar: AppBar(
-          backgroundColor: primaryColor,
-          title:
-              Text('Tambah Laporan', style: headerStyle(level: 3, dark: false)),
-          centerTitle: true,
-        ),
-        body: SafeArea(
-          child: _isLoading
-              ? const Center(child: CircularProgressIndicator())
-              : SingleChildScrollView(
-                  child: Form(
-                    child: Container(
-                      margin: const EdgeInsets.all(40),
-                      child: Column(
-                        children: [
-                          InputLayout(
-                              'Judul Laporan',
-                              TextFormField(
-                                onChanged: (value) => {title = value},
-                                validator: notEmptyValidator,
-                                decoration:
-                                    customInputDecoration('Judul Laporan'),
-                              )),
-                          Container(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            child: imagePreview(),
+      appBar: AppBar(
+        backgroundColor: primaryColor,
+        title:
+            Text('Tambah Laporan', style: headerStyle(level: 3, dark: false)),
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SingleChildScrollView(
+                child: Form(
+                  child: Container(
+                    margin: const EdgeInsets.all(40),
+                    child: Column(
+                      children: [
+                        InputLayout(
+                          'Judul Laporan',
+                          TextFormField(
+                            onChanged: (value) => {title = value},
+                            validator: notEmptyValidator,
+                            decoration: customInputDecoration('Judul Laporan'),
                           ),
-                          Container(
-                            width: double.infinity,
-                            margin: const EdgeInsets.only(bottom: 10),
-                            child: ElevatedButton(
-                              onPressed: () {
-                                uploadDialog(context);
-                              },
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  const Icon(Icons.photo_camera),
-                                  Text('Foto Pendukung',
-                                      style: headerStyle(level: 3))
-                                ],
-                              ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          child: imagePreview(),
+                        ),
+                        Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(bottom: 10),
+                          child: ElevatedButton(
+                            onPressed: () {
+                              uploadDialog(context);
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Icon(Icons.photo_camera),
+                                Text(
+                                  'Foto Pendukung',
+                                  style: headerStyle(level: 3),
+                                ),
+                              ],
                             ),
                           ),
-                          InputLayout(
-                              'Instansi',
-                              DropdownButtonFormField<String>(
-                                decoration: customInputDecoration('Instansi'),
-                                items: instituteData.map((institute) {
-                                  return DropdownMenuItem<String>(
-                                    value: institute,
-                                    child: Text(institute),
-                                  );
-                                }).toList(),
-                                onChanged: (selected) {
-                                  setState(() {
-                                    institute = selected;
-                                  });
-                                },
-                              )),
-                          InputLayout(
-                              'Deskripsi Laporan',
-                              TextFormField(
-                                onChanged: (value) => {description = value},
-                                keyboardType: TextInputType.multiline,
-                                minLines: 3,
-                                maxLines: 5,
-                                decoration: customInputDecoration(
-                                    'Deskripsikan laporan di sini'),
-                              )
+                        ),
+                        InputLayout(
+                          'Instansi',
+                          DropdownButtonFormField<String>(
+                            decoration: customInputDecoration('Instansi'),
+                            items: instituteData.map((institute) {
+                              return DropdownMenuItem<String>(
+                                value: institute,
+                                child: Text(institute),
+                              );
+                            }).toList(),
+                            onChanged: (selected) {
+                              setState(() {
+                                institute = selected;
+                              });
+                            },
                           ),
-                          const SizedBox(height: 30),
-                          SizedBox(
-                            width: double.infinity,
-                            child: FilledButton(
-                              style: buttonStyle,
-                              onPressed: () {
-                                addReport(account);
-                              },
-                              child: Text('Kirim Laporan',
-                                  style: headerStyle(level: 3, dark: false)),
+                        ),
+                        InputLayout(
+                          'Deskripsi Laporan',
+                          TextFormField(
+                            onChanged: (value) => {description = value},
+                            keyboardType: TextInputType.multiline,
+                            minLines: 3,
+                            maxLines: 5,
+                            decoration: customInputDecoration(
+                              'Deskripsikan laporan di sini',
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                        SizedBox(
+                          width: double.infinity,
+                          child: FilledButton(
+                            style: buttonStyle,
+                            onPressed: () {
+                              addReport(account);
+                            },
+                            child: Text(
+                              'Kirim Laporan',
+                              style: headerStyle(level: 3, dark: false),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-        )
+              ),
+      ),
     );
   }
 }

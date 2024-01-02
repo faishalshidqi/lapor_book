@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lapor_book/components/status_dialog.dart';
 import 'package:lapor_book/components/styles.dart';
+import 'package:lapor_book/components/vars.dart';
 import 'package:lapor_book/models/account.dart';
 import 'package:lapor_book/models/report.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -21,23 +22,25 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
   Future launch(String uri) async {
     if (uri == '') return;
     if (!await launchUrl(Uri.parse(uri))) {
-      throw Exception('Cant\' call $uri');
+      throw Exception('Can\'t call $uri');
     }
   }
 
   void statusDialog(Report report) {
     showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatusDialog(
-              status: status!,
-              onValueChanged: (value) {
-                setState(() {
-                  status = value;
-                });
-              },
-              report: report);
-        });
+      context: context,
+      builder: (BuildContext context) {
+        return StatusDialog(
+          status: status!,
+          onValueChanged: (value) {
+            setState(() {
+              status = value;
+            });
+          },
+          report: report,
+        );
+      },
+    );
   }
 
   @override
@@ -76,38 +79,39 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                           report.status == 'Posted'
                               ? textStatus(
                                   text: 'Posted',
-                                  bgColor: Colors.yellow,
-                                  textColor: Colors.black)
+                                  bgColor: colorStatus[0],
+                                  textColor: Colors.black,
+                                )
                               : report.status == 'Processed'
                                   ? textStatus(
                                       text: 'Processed',
-                                      bgColor: Colors.green,
-                                      textColor: Colors.white)
+                                      bgColor: colorStatus[1],
+                                      textColor: Colors.white,
+                                    )
                                   : textStatus(
                                       text: 'Done',
-                                      bgColor: Colors.blue,
-                                      textColor: Colors.white),
+                                      bgColor: colorStatus[2],
+                                      textColor: Colors.white,
+                                    ),
                           textStatus(
-                              text: report.institute,
-                              bgColor: Colors.white,
-                              textColor: Colors.black)
+                            text: report.institute,
+                            bgColor: Colors.white,
+                            textColor: Colors.black,
+                          ),
                         ],
                       ),
                       const SizedBox(height: 20),
                       ListTile(
                         leading: const Icon(Icons.person),
-                        title: const Center(child: Text('Reporter')),
-                        subtitle: Center(
-                          child: Text(report.name),
-                        ),
+                        title: const Text('Reporter'),
+                        subtitle: Text(report.name),
                         trailing: const SizedBox(width: 45),
                       ),
                       ListTile(
                         leading: const Icon(Icons.date_range),
-                        title: const Center(child: Text('Report Date')),
-                        subtitle: Center(
-                          child: Text(
-                              DateFormat('dd MMMM yyyy').format(report.date)),
+                        title: const Text('Report Date'),
+                        subtitle: Text(
+                          DateFormat('dd MMMM yyyy').format(report.date),
                         ),
                         trailing: IconButton(
                           icon: const Icon(Icons.location_on),
@@ -121,11 +125,16 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                         'Report\'s Description',
                         style: headerStyle(level: 3),
                       ),
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 5),
                       Container(
                         width: double.infinity,
                         margin: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Text(report.description ?? 'No Description'),
+                        child: Center(
+                            child:
+                                Text(report.description ?? 'No Description')),
+                      ),
+                      const SizedBox(
+                        height: 20,
                       ),
                       if (account.role == 'admin')
                         SizedBox(
@@ -138,14 +147,15 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
                               statusDialog(report);
                             },
                             style: TextButton.styleFrom(
-                                foregroundColor: Colors.white,
-                                backgroundColor: primaryColor,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(10))),
+                              foregroundColor: Colors.white,
+                              backgroundColor: primaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                            ),
                             child: const Text('Change Status'),
                           ),
-                        )
-
+                        ),
                     ],
                   ),
                 ),
@@ -154,17 +164,19 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
     );
   }
 
-  Container textStatus(
-      {required String text,
-      required Color bgColor,
-      required Color textColor}) {
+  Container textStatus({
+    required String text,
+    required Color bgColor,
+    required Color textColor,
+  }) {
     return Container(
       width: 150,
       alignment: Alignment.center,
       decoration: BoxDecoration(
-          color: bgColor,
-          border: Border.all(width: 1, color: primaryColor),
-          borderRadius: BorderRadius.circular(25)),
+        color: bgColor,
+        border: Border.all(width: 1, color: primaryColor),
+        borderRadius: BorderRadius.circular(25),
+      ),
       child: Text(
         text,
         style: TextStyle(color: textColor),

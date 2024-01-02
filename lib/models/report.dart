@@ -13,16 +13,17 @@ class Report {
   final String maps;
   List<Comment>? comments;
 
-  Report(
-      {required this.uid,
-      required this.docId,
-      required this.title,
-      required this.institute,
-      this.description,
-      this.imageUrl,
-      required this.name,
-      required this.status,
-      required this.date,
-      required this.maps,
-      this.comments});
+  Report({
+    required this.uid,
+    required this.docId,
+    required this.title,
+    required this.institute,
+    this.description,
+    this.imageUrl,
+    required this.name,
+    required this.status,
+    required this.date,
+    required this.maps,
+    this.comments,
+  });
 }

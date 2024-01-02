@@ -32,7 +32,8 @@ class _ReportListPageState extends State<ReportListPage> {
             return Comment(name: map['name'], content: map['content']);
           }).toList();
 
-          reportList.add(Report(
+          reportList.add(
+            Report(
               uid: documents.data()['uid'],
               docId: documents.data()['docId'],
               title: documents.data()['title'],
@@ -43,7 +44,9 @@ class _ReportListPageState extends State<ReportListPage> {
               status: documents.data()['status'],
               date: documents.data()['date'].toDate(),
               maps: documents.data()['maps'],
-              comments: commentList));
+              comments: commentList,
+            ),
+          );
         }
       });
     } catch (error) {
@@ -62,21 +65,25 @@ class _ReportListPageState extends State<ReportListPage> {
           )
         : SafeArea(
             child: Container(
-            width: double.infinity,
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-            child: GridView.builder(
+              width: double.infinity,
+              margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+              child: GridView.builder(
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 1 / 1.234),
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  childAspectRatio: 1 / 1.234,
+                ),
                 itemCount: reportList.length,
                 itemBuilder: (context, index) {
                   return ListItem(
-                      report: reportList[index],
-                      account: widget.account,
-                      isMyReport: false);
-                }),
-          ));
+                    report: reportList[index],
+                    account: widget.account,
+                    isMyReport: false,
+                  );
+                },
+              ),
+            ),
+          );
   }
 }

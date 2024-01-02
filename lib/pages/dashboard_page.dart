@@ -41,12 +41,13 @@ class _DashboardPageState extends State<DashboardPage> {
 
         setState(() {
           account = Account(
-              uid: userData['uid'],
-              docId: userData['docId'],
-              name: userData['name'],
-              phone: userData['phone'],
-              email: userData['email'],
-              role: userData['role']);
+            uid: userData['uid'],
+            docId: userData['docId'],
+            name: userData['name'],
+            phone: userData['phone'],
+            email: userData['email'],
+            role: userData['role'],
+          );
         });
       }
     } catch (error) {
@@ -77,7 +78,7 @@ class _DashboardPageState extends State<DashboardPage> {
     pages = <Widget>[
       ReportListPage(account: account),
       MyReportsPage(account: account),
-      ProfilePage(account: account)
+      ProfilePage(account: account),
     ];
     return Scaffold(
       floatingActionButton: FloatingActionButton(
@@ -93,20 +94,27 @@ class _DashboardPageState extends State<DashboardPage> {
         centerTitle: true,
       ),
       bottomNavigationBar: BottomNavigationBar(
-          backgroundColor: primaryColor,
-          currentIndex: _selectedIndex,
-          onTap: onItemTapped,
-          selectedItemColor: Colors.white,
-          selectedFontSize: 16,
-          unselectedItemColor: Colors.grey[800],
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-                icon: Icon(Icons.dashboard_outlined), label: 'All Report'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.book_outlined), label: 'My Reports'),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.person_outlined), label: 'Profile'),
-          ]),
+        backgroundColor: primaryColor,
+        currentIndex: _selectedIndex,
+        onTap: onItemTapped,
+        selectedItemColor: Colors.white,
+        selectedFontSize: 16,
+        unselectedItemColor: Colors.grey[800],
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.dashboard_outlined),
+            label: 'All Report',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.book_outlined),
+            label: 'My Reports',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_outlined),
+            label: 'Profile',
+          ),
+        ],
+      ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : pages.elementAt(_selectedIndex),

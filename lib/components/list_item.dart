@@ -3,6 +3,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lapor_book/components/styles.dart';
+import 'package:lapor_book/components/vars.dart';
 import 'package:lapor_book/models/account.dart';
 import 'package:lapor_book/models/report.dart';
 
@@ -11,11 +12,12 @@ class ListItem extends StatefulWidget {
   final Account account;
   final bool isMyReport;
 
-  const ListItem(
-      {super.key,
-      required this.report,
-      required this.account,
-      required this.isMyReport});
+  const ListItem({
+    super.key,
+    required this.report,
+    required this.account,
+    required this.isMyReport,
+  });
 
   @override
   State<ListItem> createState() => _ListItemState();
@@ -33,8 +35,9 @@ class _ListItemState extends State<ListItem> {
       _firestore.collection('reports').doc(widget.report.docId).delete();
       Navigator.popAndPushNamed(context, '/dashboard');
     } catch (error) {
+      final snackBar = SnackBar(content: Text(error.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
       print(error);
-      rethrow;
     }
   }
 
@@ -47,30 +50,36 @@ class _ListItemState extends State<ListItem> {
       ),
       child: InkWell(
         onTap: () {
-          Navigator.pushNamed(context, '/detail',
-              arguments: {'report': widget.report, 'account': widget.account});
+          Navigator.pushNamed(
+            context,
+            '/detail',
+            arguments: {'report': widget.report, 'account': widget.account},
+          );
         },
         onLongPress: () {
           if (widget.isMyReport) {
             showDialog(
-                context: context,
-                builder: (BuildContext) {
-                  return AlertDialog(
-                    title: Text('Delete ${widget.report.title}?'),
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Cancel')),
-                      TextButton(
-                          onPressed: () {
-                            deleteReport();
-                          },
-                          child: const Text('Delete')),
-                    ],
-                  );
-                });
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: Text('Delete ${widget.report.title}?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        deleteReport();
+                      },
+                      child: const Text('Delete'),
+                    ),
+                  ],
+                );
+              },
+            );
           }
         },
         child: Column(
@@ -86,17 +95,20 @@ class _ListItemState extends State<ListItem> {
                     width: 130,
                     height: 130,
                   ),
-            Container(
-              width: double.infinity,
-              alignment: Alignment.center,
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              decoration: const BoxDecoration(
-                  border: Border.symmetric(horizontal: BorderSide(width: 2))),
-              child: Text(
-                widget.report.title,
+            Flexible(
+              child: Container(
+                width: double.infinity,
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                decoration: const BoxDecoration(
+                  border: Border.symmetric(horizontal: BorderSide(width: 2)),
+                ),
+                child: Text(
+                  widget.report.title,
 
-                /// 4 mungkin error, ganti 3
-                style: headerStyle(level: 3),
+                  /// 4 mungkin error, ganti 3
+                  style: headerStyle(level: 3),
+                ),
               ),
             ),
             Row(
@@ -105,11 +117,19 @@ class _ListItemState extends State<ListItem> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     decoration: BoxDecoration(
-                        color: warningColor,
-                        borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(7)),
-                        border: const Border.symmetric(
-                            vertical: BorderSide(width: 1))),
+                      /// ganti sesuai status
+                      color: widget.report.status == 'Posted'
+                          ? colorStatus[0]
+                          : widget.report.status == 'Processed'
+                              ? colorStatus[1]
+                              : colorStatus[2],
+                      borderRadius: const BorderRadius.only(
+                        bottomLeft: Radius.circular(7),
+                      ),
+                      border: const Border.symmetric(
+                        vertical: BorderSide(width: 1),
+                      ),
+                    ),
                     alignment: Alignment.center,
                     child: Text(
                       widget.report.status,
@@ -123,11 +143,14 @@ class _ListItemState extends State<ListItem> {
                   child: Container(
                     padding: const EdgeInsets.symmetric(vertical: 11),
                     decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(7)),
-                        border: const Border.symmetric(
-                            vertical: BorderSide(width: 1))),
+                      color: primaryColor,
+                      borderRadius: const BorderRadius.only(
+                        bottomRight: Radius.circular(7),
+                      ),
+                      border: const Border.symmetric(
+                        vertical: BorderSide(width: 1),
+                      ),
+                    ),
                     alignment: Alignment.center,
                     child: Text(
                       DateFormat('dd/MM/yyyy').format(widget.report.date),
@@ -136,9 +159,9 @@ class _ListItemState extends State<ListItem> {
                       style: headerStyle(level: 5, dark: false),
                     ),
                   ),
-                )
+                ),
               ],
-            )
+            ),
           ],
         ),
       ),

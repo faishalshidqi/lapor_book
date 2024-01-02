@@ -8,11 +8,12 @@ class StatusDialog extends StatefulWidget {
   final String status;
   final ValueChanged<String> onValueChanged;
   final Report report;
-  const StatusDialog(
-      {super.key,
-      required this.status,
-      required this.onValueChanged,
-      required this.report});
+  const StatusDialog({
+    super.key,
+    required this.status,
+    required this.onValueChanged,
+    required this.report,
+  });
 
   @override
   State<StatusDialog> createState() => _StatusDialogState();
@@ -33,8 +34,8 @@ class _StatusDialogState extends State<StatusDialog> {
           .update({'status': status});
       Navigator.popAndPushNamed(context, '/dashboard');
     } catch (error) {
-      print(error);
-      rethrow;
+      final snackBar = SnackBar(content: Text(error.toString()));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
@@ -52,7 +53,9 @@ class _StatusDialogState extends State<StatusDialog> {
         width: MediaQuery.of(context).size.width * 0.8,
         padding: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+        ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
@@ -61,33 +64,31 @@ class _StatusDialogState extends State<StatusDialog> {
               style: headerStyle(level: 2),
             ),
             const SizedBox(height: 20),
-            ListView.builder(
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: dataStatus.length,
-                itemBuilder: (context, index) {
-                  return RadioListTile<String>(
-                    title: Text(dataStatus[index]),
-                    value: dataStatus[index],
-                    groupValue: status,
-                    onChanged: (value) {
-                      setState(() {
-                        status = value!;
-                      });
-                    },
-                  );
-                }),
+            for (var data in dataStatus)
+              RadioListTile(
+                value: data,
+                title: Text(data),
+                groupValue: status,
+                onChanged: (value) {
+                  setState(() {
+                    status = value!;
+                  });
+                },
+              ),
             const SizedBox(height: 20),
             ElevatedButton(
-                onPressed: () {
-                  print(status);
-                  updateStatus();
-                },
-                style: TextButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: primaryColor,
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10))),
-                child: Text('Save $status as status'))
+              onPressed: () {
+                updateStatus();
+              },
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: primaryColor,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+              child: Text('Save $status as status'),
+            ),
           ],
         ),
       ),
