@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:lapor_book/components/styles.dart';
@@ -99,7 +100,7 @@ class _ListItemState extends State<ListItem> {
               child: Container(
                 width: double.infinity,
                 alignment: Alignment.center,
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 5),
                 decoration: const BoxDecoration(
                   border: Border.symmetric(horizontal: BorderSide(width: 2)),
                 ),
@@ -115,7 +116,7 @@ class _ListItemState extends State<ListItem> {
               children: [
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                     decoration: BoxDecoration(
                       /// ganti sesuai status
                       color: widget.report.status == 'Posted'
@@ -141,7 +142,7 @@ class _ListItemState extends State<ListItem> {
                 ),
                 Expanded(
                   child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 11),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                     decoration: BoxDecoration(
                       color: primaryColor,
                       borderRadius: const BorderRadius.only(
@@ -152,11 +153,14 @@ class _ListItemState extends State<ListItem> {
                       ),
                     ),
                     alignment: Alignment.center,
-                    child: Text(
-                      DateFormat('dd/MM/yyyy').format(widget.report.date),
+                    child: Center(
+                      child: Text(
+                        ///DateFormat('dd/MM/yyyy').format(widget.report.date),
+                        'Likes: ${widget.report.likes.toString()}',
 
-                      /// 5 mungkin error
-                      style: headerStyle(level: 5, dark: false),
+                        /// 5 mungkin error
+                        style: headerStyle(level: 4, dark: false),
+                      ),
                     ),
                   ),
                 ),

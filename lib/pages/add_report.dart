@@ -85,6 +85,7 @@ class _AddReportPageState extends State<AddReportPage> {
         'status': 'Posted',
         'date': timestamp,
         'maps': maps,
+        'likes': 0,
       }).catchError((error) {
         throw error;
       });

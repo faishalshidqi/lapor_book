@@ -44,6 +44,7 @@ class _ReportListPageState extends State<ReportListPage> {
               status: documents.data()['status'],
               date: documents.data()['date'].toDate(),
               maps: documents.data()['maps'],
+              likes: documents.data()['likes'],
               comments: commentList,
             ),
           );

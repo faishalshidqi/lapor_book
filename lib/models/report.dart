@@ -1,4 +1,5 @@
 import 'package:lapor_book/models/comment.dart';
+import 'package:lapor_book/models/like.dart';
 
 class Report {
   final String uid;
@@ -12,6 +13,7 @@ class Report {
   final DateTime date;
   final String maps;
   List<Comment>? comments;
+  int likes;
 
   Report({
     required this.uid,
@@ -25,5 +27,6 @@ class Report {
     required this.date,
     required this.maps,
     this.comments,
+    required this.likes,
   });
 }

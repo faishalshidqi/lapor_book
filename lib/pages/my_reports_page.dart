@@ -48,6 +48,7 @@ class _MyReportsPageState extends State<MyReportsPage> {
               status: documents.data()['status'],
               date: documents.data()['date'].toDate(),
               maps: documents.data()['maps'],
+              likes: documents.data()['likes'],
               comments: commentList,
             ),
           );

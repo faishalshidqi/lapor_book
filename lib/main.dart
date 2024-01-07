@@ -34,6 +34,6 @@ class MyApp extends StatelessWidget {
           '/dashboard': (context) => const DashboardPage(),
           '/add': (context) => const AddReportPage(),
           '/detail': (context) => const ReportDetailPage(),
-        });
+        },);
   }
 }
