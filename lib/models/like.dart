@@ -4,5 +4,10 @@ class Like {
   final String like;
   final DateTime date;
 
-  Like({required this.uid, required this.docId, required this.like, required this.date});
+  Like({
+    required this.uid,
+    required this.docId,
+    required this.like,
+    required this.date,
+  });
 }

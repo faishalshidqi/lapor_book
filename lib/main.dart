@@ -21,19 +21,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Lapor Book',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => const SplashPage(),
-          '/register': (context) => const RegisterPage(),
-          '/login': (context) => const LoginPage(),
-          '/dashboard': (context) => const DashboardPage(),
-          '/add': (context) => const AddReportPage(),
-          '/detail': (context) => const ReportDetailPage(),
-        },);
+      title: 'Lapor Book',
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashPage(),
+        '/register': (context) => const RegisterPage(),
+        '/login': (context) => const LoginPage(),
+        '/dashboard': (context) => const DashboardPage(),
+        '/add': (context) => const AddReportPage(),
+        '/detail': (context) => const ReportDetailPage(),
+      },
+    );
   }
 }

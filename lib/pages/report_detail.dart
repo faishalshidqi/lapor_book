@@ -52,7 +52,10 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
   void addLike(Account account, Report report) async {
     try {
       CollectionReference reportCollection = _firestore.collection('reports');
-      CollectionReference likeCollection = _firestore.collection('reports').doc(report.docId).collection('likes');
+      CollectionReference likeCollection = _firestore
+          .collection('reports')
+          .doc(report.docId)
+          .collection('likes');
 
       await likeCollection.doc().set({
         'uid': _auth.currentUser!.uid,
@@ -60,22 +63,32 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
         'timestamp': Timestamp.fromDate(DateTime.now()),
       });
 
-      await reportCollection.doc(report.docId).update({'likes': report.likes += 1});
-    }
-    catch (error) {
-      final snackBar = SnackBar(content: Text(error.toString()),);
+      await reportCollection
+          .doc(report.docId)
+          .update({'likes': report.likes += 1});
+      setState(() {
+        isLiked = true;
+      });
+    } catch (error) {
+      final snackBar = SnackBar(
+        content: Text(error.toString()),
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
   void getLikes(Report report) async {
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await _firestore
-        .collection('reports').doc(report.docId).collection('likes')
+        .collection('reports')
+        .doc(report.docId)
+        .collection('likes')
         .where('uid', isEqualTo: _auth.currentUser!.uid)
         .limit(1)
         .get();
     if (querySnapshot.docs.isNotEmpty) {
-      isLiked = true;
+      setState(() {
+        isLiked = true;
+      });
     }
   }
 
@@ -93,12 +106,17 @@ class _ReportDetailPageState extends State<ReportDetailPage> {
         title: Text('Report Detail', style: headerStyle(level: 3, dark: false)),
         centerTitle: true,
         actions: [
-          isLiked ? const Icon(Icons.thumb_up_alt_outlined) : IconButton(
-            icon: const Icon(CupertinoIcons.heart_fill),
-            onPressed: () {
-              addLike(account, report);
-            },
-          ),
+          isLiked
+              ? const SizedBox(
+                  width: 50,
+                  child: Text('Liked!'),
+                )
+              : IconButton(
+                  icon: const Icon(CupertinoIcons.heart_fill),
+                  onPressed: () {
+                    addLike(account, report);
+                  },
+                ),
         ],
       ),
       body: SafeArea(
