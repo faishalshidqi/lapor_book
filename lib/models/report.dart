@@ -1,5 +1,4 @@
 import 'package:lapor_book/models/comment.dart';
-import 'package:lapor_book/models/like.dart';
 
 class Report {
   final String uid;
